@@ -18,3 +18,15 @@ typecheck
 ---------
 
 Checks if arguments match the function annotation.
+
+
+resolver
+--------
+
+A simple function that just resolves domain names to ip addresses.
+
+TODO:
+
+1. Returns only one random record.
+
+1. Supports only A-records for now.
