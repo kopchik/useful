@@ -14,3 +14,7 @@ TODO:
 1. Rename Output class to Channel.
 1. Check channel verbosity.
 
+typecheck
+---------
+
+Checks if arguments match the function annotation.
