@@ -89,7 +89,7 @@ class Log:
 
     # TODO: check channel verbosity
     for output in outputs:
-      print(output)
+      # print("printing to", output)
       if output.colored:
         output.write(colored(msg, **style))
       else:
