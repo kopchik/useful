@@ -1,3 +1,4 @@
+import socket
 try:
   import ipaddress
 except ImportError:
