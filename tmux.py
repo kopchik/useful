@@ -6,9 +6,10 @@ import os
 
 DEBUG = False
 if DEBUG:
-  from useful.log import Log
-  set_log_file("/tmp/tmux_debug")
+  from useful.log import Log, add_output, FileOutput
+  add_output(FileOutput("/tmp/tmux_debug"))
   log = Log("tmux")
+  log.debig("=== started ===")
 
 
 def run(cmd):
@@ -41,7 +42,7 @@ class TMUX:
     try:
       check_run(self._prefix+"has-session -t {session}".format(session=session))
       if DEBUG:
-        log.debug("HAS SESSION!")
+        log.debug("we have session %s" % session)
     except subprocess.CalledProcessError:
       check_run(self._prefix+"new-session -s {session} -d".format(session=session))
       if remain_on_exit:
