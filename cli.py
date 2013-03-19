@@ -33,7 +33,7 @@ class MetaCLI(type):
 
 class CLI(metaclass=MetaCLI):
   """Base class for CLI interfaces"""
-  def cmd(self, cmd):
+  def run_cmd(self, cmd):
     for r, f in self.__cmdmap__.items():
       m = re.match(r, cmd)
       if m:
