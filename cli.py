@@ -40,14 +40,14 @@ class CLI(metaclass=MetaCLI):
         f(self, **m.groupdict())
         break
     else:
-      raise NoMatch
+      raise NoMatch("no such command defined: %s" % cmd)
 
 
 if __name__ == '__main__':
   class Example(CLI):
-    @command("start <name>")
+    @command("start [name]")
     def do_start(self, name=None):
       print("STARTED", name)
 
   cli = CLI()
-  cli.cmd("start test")
+  cli.run_cmd("start test")
