@@ -50,12 +50,13 @@ class FileOutput(Output):
     self.fd = open(path, 'a', buffering=1)
 
   def write(self, msg):
-    self.fd.write(msg)
+    self.fd.write(msg+'\n')
 
 
 class Log:
   styles = {
     'debug': {},
+    'info': {},
     'notice': {'color': 'green', 'attrs': ['bold']},
     'error': {'color': 'red'},
     'critical': {'color': 'red', 'attrs': ['reverse']},
