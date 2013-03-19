@@ -10,8 +10,8 @@ class command:
   def __init__(self, raw):
     r = []
     for tok in shlex.split(raw):
-      if tok.startswith("<"):
-        name = tok.strip("<>")
+      if tok.startswith("["):
+        name = tok.strip("[]")
         r += [r"(?P<%s>\w+)" % name]
       else:
         r += [tok]
