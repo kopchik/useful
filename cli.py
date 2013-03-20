@@ -12,7 +12,7 @@ class command:
     for tok in shlex.split(raw):
       if tok.startswith("["):
         name = tok.strip("[]")
-        r += [r"(?P<%s>\w+)" % name]
+        r += [r"(?P<%s>\w+)\s*" % name]
       else:
         r += [tok]
     self.regexp = " ".join(r)
