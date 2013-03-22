@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+# from http://norvig.com/python-iaq.html
 class Struct:
   def __init__(self, **entries):
     self.__dict__.update(entries)
