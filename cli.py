@@ -7,7 +7,7 @@ current_class = None
 class NoMatch(Exception): pass
 
 class command:
-  def __init__(self, raw):
+  def __init__(self, raw, help=None):
     r = []
     for tok in shlex.split(raw):
       if tok.startswith("["):
