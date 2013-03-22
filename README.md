@@ -42,3 +42,15 @@ cli
 ---
 
 Command line parser.
+
+
+mlockall
+--------
+
+A mlockall/munlockall ctypes wrapper.
+
+
+mystruct
+--------
+
+A very trivial structure-like class from http://norvig.com/python-iaq.html
