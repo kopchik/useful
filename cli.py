@@ -37,7 +37,8 @@ class CLI(metaclass=MetaCLI):
     for r, f in self.__cmdmap__.items():
       m = re.match(r, cmd)
       if m:
-        f(self, **m.groupdict())
+        r = f(self, **m.groupdict())
+        if r: print(r)
         break
     else:
       raise NoMatch("no such command defined: %s" % cmd)
