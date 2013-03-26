@@ -45,6 +45,7 @@ class CLI(metaclass=MetaCLI):
 
 if __name__ == '__main__':
   class Example(CLI):
+    @command("[name] start")
     @command("start [name]")
     def do_start(self, name=None):
       print("STARTED", name)
