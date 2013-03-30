@@ -19,6 +19,24 @@ TBLIMIT = 6
 nothing = lambda *x,**y: None
 outputs = []  # default outputs
 priority = ['debug', 'info', 'notice', 'error', 'critical']
+default = 1  # info
+loggers = []
+
+def str2lvl(lvl):
+  if isinstance(lvl,str):
+    assert lvl in priority
+    lvl = priority.index(lvl)
+  return lvl
+
+
+def set_global_level(lvl):
+  global default
+  global loggers
+  lvl = str2lvl(lvl)
+  default = lvl
+  for log in loggers:
+    log.set_verbosity(lvl)
+
 
 class Output:
   styles = {
@@ -66,15 +84,19 @@ class FileOutput(Output):
 class Log:
   def __init__(self, name, lvl=None,
                fmt="{tstamp:%H:%M:%S} {cat} {name}: {msg}", outputs=outputs):
-    self.lvl = 0
+    global loggers
+    global default
+    if lvl is None:
+      lvl = default
+    self.lvl = lvl
     self.fmt = fmt
     self.name = name
     self.format = string.Formatter().format
     self.outputs = outputs
+    loggers += [self]
 
-  def set_lvl(self, lvl):
-    assert lvl in self.priority
-    self.lvl = lvl
+  def set_verbosity(self, lvl):
+    self.lvl = to_level(lvl)
 
   def log(self, msg, *args, lvl=0, style=None, tb=None):
     if lvl < self.lvl:
@@ -122,6 +144,7 @@ class Log:
 
 if __name__ == '__main__':
   outputs += [SyslogOutput()]
+  set_global_level('debug')
   log = Log("test")
   log.debug("debug")
   log.info("info")
