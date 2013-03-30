@@ -1,9 +1,5 @@
 #!/usr/bin/env python3
 
-""" Verbosity determines how much output
-    will be printer. There is a corresponding
-    number.
-"""
 from datetime import datetime
 from functools import partial
 
