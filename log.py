@@ -96,7 +96,7 @@ class Log:
     loggers += [self]
 
   def set_verbosity(self, lvl):
-    self.lvl = to_level(lvl)
+    self.lvl = str2lvl(lvl)
 
   def log(self, msg, *args, lvl=0, style=None, tb=None):
     if lvl < self.lvl:
@@ -120,7 +120,7 @@ class Log:
       else:
         tb = traceback.format_stack(limit=TBLIMIT)
         tb = "".join(tb)
-      msg += tb
+      msg += "\n" + tb
 
     for output in self.outputs:
         output.write(msg, lvl=lvl)
