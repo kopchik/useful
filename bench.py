@@ -47,9 +47,11 @@ class Avg:
 
 
 
-class BasicTimer:
+class StopWatch:
   def __init__(self):
     self.started = False
+    self.cpu     = None
+    self.time    = None
 
   def start(self):
     if self.started:
