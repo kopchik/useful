@@ -14,6 +14,7 @@ TODO:
 1. Rename Output class to Channel.
 1. Check channel verbosity.
 
+
 typecheck
 ---------
 
@@ -53,4 +54,4 @@ A mlockall/munlockall ctypes wrapper.
 mystruct
 --------
 
-A very trivial structure-like class from http://norvig.com/python-iaq.html
+A structure-like class from http://norvig.com/python-iaq.html
