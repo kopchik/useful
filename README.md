@@ -55,3 +55,9 @@ mystruct
 --------
 
 A structure-like class from http://norvig.com/python-iaq.html
+
+
+bench
+-----
+
+Things like stop watch live there.
