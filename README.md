@@ -61,3 +61,9 @@ bench
 -----
 
 Things like stop watch live there.
+
+
+mypipe
+------
+
+It's an os.pipe2() that closes fds when leaving with-statement.

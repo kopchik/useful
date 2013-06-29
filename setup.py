@@ -3,7 +3,7 @@
 from distutils.core import setup
 
 setup(name='exeutilz',
-      version='1.2',
+      version='1.3',
       author="Kandalintsev Alexandre",
       author_email='spam@messir.net',
       license="GPLv3",
