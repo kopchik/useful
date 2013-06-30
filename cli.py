@@ -21,7 +21,9 @@ class command:
     global current_class
     if not hasattr(current_class, "__cmdmap__"):
       current_class.__cmdmap__ = OrderedDict()
-    current_class.__cmdmap__[self.regexp] = f
+    # we map by name to avoid problems with sublcassing
+    # when CLI class refers to an old methods
+    current_class.__cmdmap__[self.regexp] = f.__name__
     return f
 
 
@@ -34,10 +36,12 @@ class MetaCLI(type):
 class CLI(metaclass=MetaCLI):
   """Base class for CLI interfaces"""
   def run_cmd(self, cmd):
-    for r, f in self.__cmdmap__.items():
+    for r, fname in self.__cmdmap__.items():
       m = re.match(r, cmd)
       if m:
-        f(self, **m.groupdict())
+        f = getattr(self, fname)
+        r = f(**m.groupdict())
+        if r: print(r)
         break
     else:
       raise NoMatch("no such command defined: %s" % cmd)
@@ -45,6 +49,7 @@ class CLI(metaclass=MetaCLI):
 
 if __name__ == '__main__':
   class Example(CLI):
+    @command("[name] start")
     @command("start [name]")
     def do_start(self, name=None):
       print("STARTED", name)
