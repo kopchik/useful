@@ -67,3 +67,10 @@ mypipe
 ------
 
 It's an os.pipe2() that closes fds when leaving with-statement.
+
+
+mstring
+-------
+
+Magic expansion of variables in strings. *Never* use this code
+because it relies on inspect module that considered harmful.
