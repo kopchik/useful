@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """ This modules uses deep python magic
     and therefore cannot be considered reliabale.
-    You have been warned. 
-""" 
+    You have been warned.
+"""
 import inspect
 import re
 
 def s(string):
-  variables = re.findall("\$\{(\S+)\}", string, re.M)
+  variables = re.findall("\$\{([a-zA-Z\.]+)\}", string, re.M)
 
   if not variables:
     return string
