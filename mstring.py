@@ -34,6 +34,8 @@ if __name__ == '__main__':
       # basic test
       x=1
       assert s("${x}") == str(x)
+      y=2
+      assert s("${x}/${y}") == "{x}/{y}".format(x=x,y=y)
       
       # test single-depth substitution
       self.test = 1
