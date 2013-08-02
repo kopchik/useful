@@ -1,5 +1,6 @@
 from subprocess import *
 import shlex
+import os
 
 def run(cmd, sudo=False):
   """Just runs cmd"""
@@ -18,8 +19,14 @@ def run_(*args, **kwargs):
 
 def sudo(*args, **kwargs):
   """run cmd with sudo -u root"""
-  run(*args, sudo='root', **kwargs)
+  if os.geteuid() == 0:
+    run(*args, **kwargs)
+  else:
+    run(*args, sudo='root', **kwargs)
 
 def sudo_(*args, **kwargs):
   """The same as sudo(), but ignores exceptions"""
-  run_(*args, sudo='root', **kwargs)
+  try:
+    sudo(*args, **kwargs)
+  except Exception as err:
+    print("ignoring:", err)
