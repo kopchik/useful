@@ -74,3 +74,10 @@ mstring
 
 Magic expansion of variables in strings. *Never* use this code
 because it relies on inspect module that considered harmful.
+
+
+debug
+-----
+
+Automaticaly start debugger on unhandled exception. The code is
+taken from http://code.activestate.com/recipes/65287/
