@@ -15,7 +15,7 @@ class command:
         r += [r"(?P<%s>\w+)\s*" % name]
       else:
         r += [tok]
-    self.regexp = " ".join(r)
+    self.regexp = " ".join(r) + '$'
 
   def __call__(self, f):
     global current_class
