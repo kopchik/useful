@@ -98,6 +98,10 @@ class Log:
   def set_verbosity(self, lvl):
     self.lvl = str2lvl(lvl)
 
+  @classmethod
+  def set_global_level(cls, lvl):
+    set_global_level(lvl)
+
   def log(self, msg, *args, lvl=0, style=None, tb=None):
     if lvl < self.lvl:
       return
