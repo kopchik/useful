@@ -11,7 +11,7 @@ class Reader:
 
   def __next__(self):
     raw = ''
-    while not raw:
+    while not raw or raw.startswith('#'):  # skip comments
       raw = next(self.data).strip()
     data = raw.split(self.sep)
     if not self.type:
