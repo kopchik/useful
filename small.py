@@ -18,7 +18,7 @@ def invoke(cmd, ns, **params):
       Arguments from CMD have precedence
       over **params.
   '''
-  params.update(dict(s.split('=') for s in cmd.split('|')))
+  params.update(dict(s.split('=',1) for s in cmd.split('|')))
   assert 'func' in params, "please specify func=blah in parameters"
   funcname = params.pop('func')
   func = ns[funcname]
