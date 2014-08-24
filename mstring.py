@@ -7,7 +7,7 @@ import inspect
 import re
 
 def s(string, lvl=1):
-  variables = re.findall("\$\{([a-zA-Z\.]+)\}", string, re.M)
+  variables = re.findall("\$\{([a-zA-Z_\.]+)\}", string, re.M)
 
   if not variables:
     return string
