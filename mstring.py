@@ -6,13 +6,17 @@
 import inspect
 import re
 
-def s(string):
+def s(string, lvl=1):
   variables = re.findall("\$\{([a-zA-Z\.]+)\}", string, re.M)
 
   if not variables:
     return string
 
-  f_locals = inspect.currentframe().f_back.f_locals
+  frame = inspect.currentframe().f_back
+  for _ in range(lvl-1):
+    frame = frame.f_back
+  f_locals = frame.f_locals
+
   for variable in variables:
     try:
         path = variable.split(".")
@@ -27,6 +31,11 @@ def s(string):
   return string
 
 
+def prints(string, *args, **kwargs):
+  string = s(string, lvl=2)
+  print(string, *args, **kwargs)
+
+
 if __name__ == '__main__':
   class Generic: pass
   class Test:
@@ -36,7 +45,7 @@ if __name__ == '__main__':
       assert s("${x}") == str(x)
       y=2
       assert s("${x}/${y}") == "{x}/{y}".format(x=x,y=y)
-      
+
       # test single-depth substitution
       self.test = 1
       assert s("${self.test}") == str(self.test)
@@ -44,5 +53,11 @@ if __name__ == '__main__':
       # test nested substitution
       self.nested = Generic()
       self.nested.test = "haba"
-      assert s("${self.nested.test}") == str(self.nested.test)
+      assert s("${self.nested.test}") == self.nested.test
+
+      # test prints
+      from io import StringIO
+      buf = StringIO()
+      prints("${self.nested.test}", file=buf, end='')
+      assert buf.getvalue() == self.nested.test
   test = Test()
