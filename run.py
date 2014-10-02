@@ -1,3 +1,4 @@
+from getpass import getuser
 from subprocess import *
 import shlex
 import os
@@ -6,14 +7,14 @@ def run(cmd, sudo=False):
   """Just runs cmd"""
   if isinstance(cmd, str):
     cmd = shlex.split(cmd)
-  if sudo:
-    cmd = ["sudo", "-u", sudo] + cmd
-  check_call(cmd)
+  if sudo and sudo != getuser():
+      cmd = ["sudo", "-u", sudo] + cmd
+  return check_output(cmd)
 
 def run_(*args, **kwargs):
   """The same as run(), but ignores exceptions"""
   try:
-    run(*args, **kwargs)
+    return run(*args, **kwargs)
   except Exception as err:
     print("ignoring:", err)
 
