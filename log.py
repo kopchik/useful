@@ -1,158 +1,61 @@
 #!/usr/bin/env python3
-
-from datetime import datetime
-from functools import partial
-
-import traceback
-import string
-import syslog
+from fnmatch import fnmatch
+from copy import copy
 import sys
 
 try:
-    from termcolor import colored
+  from termcolor import colored
 except ImportError:
-    import warnings
-    warnings.warn("no termcolor module, colors not supported")
-    colored = lambda text, *args, **kwargs: text
+  colored = lambda s, *arg, **kwargs: s
 
-TBLIMIT = 6
-nothing = lambda *x,**y: None
-outputs = []  # default outputs
-priority = ['debug', 'info', 'notice', 'error', 'critical']
-default = 1  # info
-loggers = []
+levels = ["debug", "info", "critical"]
 
-def str2lvl(lvl):
-  if isinstance(lvl,str):
-    assert lvl in priority
-    lvl = priority.index(lvl)
-  return lvl
+styles = {
+  'debug': {'color': 'white'},
+  'info': {'color': 'green'},
+  'notice': {'color': 'green', 'attrs': ['bold']},
+  'error': {'color': 'red'},
+  'critical': {'color': 'red', 'attrs': ['reverse']},
+}
 
 
-def set_global_level(lvl):
-  global default
-  global loggers
-  lvl = str2lvl(lvl)
-  default = lvl
-  for log in loggers:
-    log.set_verbosity(lvl)
+class Filter:
+  def __init__(self, rules=[], default=True):
+    self.rules = rules
+    self.default = default
 
+  def test(self, path):
+    path = ".".join(path)
+    for pattern,mode in self.rules:
+      if fnmatch(path, pattern):
+        return mode
+    return self.default
 
-class Output:
-  styles = {
-    'debug': {},
-    'info': {},
-    'notice': {'color': 'green', 'attrs': ['bold']},
-    'error': {'color': 'red'},
-    'critical': {'color': 'red', 'attrs': ['reverse']},
-  }
-
-  def __init__(self, lvl=0):
-    self.lvl = lvl
-
-  def write(self, msg, lvl=0):
-    if lvl >= self.lvl:
-      self.writer(msg, lvl=lvl)
-
-  def writer(self, msg, lvl=None):
-    category = priority[lvl]
-    style = {}
-    if category in self.styles:
-      style = self.styles[category]
-    print(colored(msg, **style), file=sys.stderr)
-outputs += [Output()]
-
-
-class SyslogOutput(Output):
-  def __init__(self, lvl=0):
-    super().__init__(lvl=lvl)
-
-  def writer(self, msg, lvl=None):
-    syslog.syslog(msg)
-
-
-class FileOutput(Output):
-  def __init__(self, path=None, lvl=0):
-    assert path, "please specify path to file"
-    self.fd = open(path, 'a', buffering=1)
-    super().__init__(lvl)
-
-  def writer(self, msg):
-    self.fd.write(msg+'\n')
+logfilter = Filter()
 
 
 class Log:
-  def __init__(self, name, lvl=None,
-               fmt="{tstamp:%H:%M:%S} {cat} {name}: {msg}", outputs=outputs):
-    global loggers
-    global default
-    if lvl is None:
-      lvl = default
-    self.lvl = lvl
-    self.fmt = fmt
-    self.name = name
-    self.format = string.Formatter().format
-    self.outputs = outputs
-    loggers += [self]
+  def __init__(self, prefix=[]):
+    if isinstance(prefix, str):
+        prefix = prefix.split('.')
+    self.prefix = prefix
+    self.path = copy(self.prefix)
 
-  def set_verbosity(self, lvl):
-    self.lvl = str2lvl(lvl)
-
-  @classmethod
-  def set_global_level(cls, lvl):
-    set_global_level(lvl)
-
-  def log(self, msg, *args, lvl=0, style=None, tb=None):
-    if lvl < self.lvl:
-      return
-
-    # expand msg
-    if args:
-      try:
-        msg = msg % args
-      except TypeError:
-        # fallback
-        msg = " ".join([msg]+list(args))
-
-    tstamp = datetime.today()
-    msg = self.format(self.fmt, msg=msg, cat=priority[lvl],
-                        tstamp=tstamp, name=self.name)
-
-    if tb:
-      if sys.exc_info() != (None, None, None):
-        tb = traceback.format_exc(TBLIMIT)
-      else:
-        tb = traceback.format_stack(limit=TBLIMIT)
-        tb = "".join(tb)
-      msg += "\n" + tb
-
-    for output in self.outputs:
-        output.write(msg, lvl=lvl)
-
+  def __getattr__(self, name):
+    self.path.append(name)
+    return self
 
   def __call__(self, *args, **kwargs):
-    return self.debug(*args, **kwargs)
+    self.log(*args, **kwargs)
 
-
-  def __getattr__(self, category, **kwargs):
-    if category in priority:
-      lvl = priority.index(category)
-      if lvl < self.lvl:
-        return nothing
-    else:
-      print("unknown category %s" % category, file=sys.stderr)
-      lvl = 1
-
-    return partial(self.log, lvl=lvl, **kwargs)
+  def log(self, *msg):
+    if logfilter.test(self.path):
+      style = styles.get(self.path[-1], styles['debug'])
+      msg = '.'.join(self.path)+': '+" ".join(str(m) for m in msg)
+      print(colored(msg, **style), file=sys.stderr)
+    self.path = copy(self.prefix)
 
 
 if __name__ == '__main__':
-  outputs += [SyslogOutput()]
-  set_global_level('debug')
-  log = Log("test")
-  log.debug("debug")
-  log.info("info")
-  log.notice("notice")
-  log.error("error")
-  log.critical("critical")
-  log.critical("test")
+  log = Log(["test"])
+  log.test1.test2.error("haba-haba")
