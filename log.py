@@ -35,11 +35,12 @@ logfilter = Filter()
 
 
 class Log:
-  def __init__(self, prefix=[]):
+  def __init__(self, prefix=[], file=sys.stderr):
     if isinstance(prefix, str):
         prefix = prefix.split('.')
     self.prefix = prefix
     self.path = copy(self.prefix)
+    self.file = file
 
   def __getattr__(self, name):
     self.path.append(name)
@@ -52,7 +53,7 @@ class Log:
     if logfilter.test(self.path):
       style = styles.get(self.path[-1], styles['debug'])
       msg = '.'.join(self.path)+': '+" ".join(str(m) for m in msg)
-      print(colored(msg, **style), file=sys.stderr)
+      print(colored(msg, **style), file=self.file)
     self.path = copy(self.prefix)
 
 
