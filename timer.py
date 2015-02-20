@@ -14,11 +14,19 @@ class Timer(Thread):
     self.read_fd = read_fd
     self.write_fd = write_fd
 
-  def reset(self):
+  def restart(self, timeout=None):
+    """ Restart timer. """
+    if timeout:
+      self.timeout = timeout
     os.write(self.write_fd, b'r')
 
   def cancel(self):
+    """ Canceled, no events will fire until restarted. """
     os.write(self.write_fd, b'c')
+
+  def abort(self):
+    """ Stop timer completely, timer thread will quit. """
+    os.write(self.write_fd, b'a')
 
   def run(self):
     while True:
@@ -27,11 +35,12 @@ class Timer(Thread):
       print(ready_fds[0])
       if self.read_fd in ready_fds[0]:
         mode = os.read(self.read_fd, 1)
-        if mode == b'r':
-          # print("timer was reset")
+        if mode == b'r':    # restart
           continue
-        elif mode == b'c':
-          # print("timer canceled")
+        elif mode == b'c':  # cancel pending events
+          self.timeout = None
+          continue
+        elif mode == b'a':  # abort
           break
         else:
           raise Exception("unknown mode %s" % mode)
