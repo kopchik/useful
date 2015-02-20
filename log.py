@@ -53,9 +53,12 @@ class Log:
 
   def log(self, *msg):
     if logfilter.test(self.path):
-      style = styles.get(self.path[-1], styles['debug'])
       msg = '.'.join(self.path)+': '+" ".join(str(m) for m in msg)
-      print(colored(msg, **style), file=self.file)
+      if self.file == sys.stderr:
+        style = styles.get(self.path[-1], styles['debug'])
+        print(colored(msg, **style), file=self.file)
+      else:
+        print(msg, file=self.file)
     self.path = copy(self.prefix)
 
 
