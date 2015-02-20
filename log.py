@@ -35,12 +35,14 @@ logfilter = Filter()
 
 
 class Log:
-  def __init__(self, prefix=[], file=sys.stderr):
+  file = sys.stderr
+  def __init__(self, prefix=[], file=None):
     if isinstance(prefix, str):
         prefix = prefix.split('.')
     self.prefix = prefix
     self.path = copy(self.prefix)
-    self.file = file
+    if file:
+      self.file = file
 
   def __getattr__(self, name):
     self.path.append(name)
