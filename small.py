@@ -13,6 +13,14 @@ def dictzip(d1,d2):
     yield (k,v1,v2)
 
 
+def flatten(l):
+  for e in l:
+    if isinstance(e, (list, tuple)):
+      yield from flatten(e)
+    else:
+      yield e
+
+
 def invoke(cmd, ns, **params):
   ''' Parse function arguments.
       Arguments from CMD have precedence
