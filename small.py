@@ -1,7 +1,3 @@
-import subprocess
-import inspect
-
-
 def dictzip(d1, d2):
   for k, v1 in d1.items():
     v2 = d2[k]
@@ -23,11 +19,25 @@ def readfd(fd, seek0=True, conv=float, sep=None):
   return [conv(r) for r in raw.split(sep)]
 
 
+def nsplit(l, n):
+  """from http://stackoverflow.com/questions/2130016/"""
+  avg = len(l) / n
+  out = []
+  last = 0.0
+
+  while last < len(l):
+    out.append(l[int(last):int(last + avg)])
+    last += avg
+
+  return out
+
+
 def invoke(cmd, ns, **params):
   ''' Parse function arguments.
       Arguments from CMD have precedence
       over **params.
   '''
+  import inspect  # lazy loading
   params.update(dict(s.split('=', 1) for s in cmd.split('|')))
   assert 'func' in params, "please specify func=blah in parameters"
   funcname = params.pop('func')
