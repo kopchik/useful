@@ -52,3 +52,16 @@ def invoke(cmd, ns, **params):
     params[name] = typ(value)
 
   return func, params
+
+
+def partition(l, key):
+  r = []
+  idxmap = {}
+  for e in l:
+    k = key(e)
+    if k not in idxmap:
+      a = []
+      r.append(a)
+      idxmap[k] = a
+    idxmap[k].append(e)
+  return r
