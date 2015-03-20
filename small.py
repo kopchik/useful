@@ -65,3 +65,13 @@ def partition(l, key):
       idxmap[k] = a
     idxmap[k].append(e)
   return r
+
+
+def partition2(l, key):
+  left, right = [], []
+  for e in l:
+    if key(e):
+      left.append(e)
+    else:
+      right.append(e)
+  return left, right
