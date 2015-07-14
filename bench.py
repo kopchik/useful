@@ -65,6 +65,9 @@ class StopWatch:
   def __exit__(self, type, value, traceback):
     self.stop()
 
+  def __repr__(self):
+    return "StopWatch(wall={wall},cpu={cpu})".format(wall=self.time, cpu=self.cpu)
+
 
 if __name__ == '__main__':
   import numpy as np
