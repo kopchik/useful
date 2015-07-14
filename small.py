@@ -79,3 +79,11 @@ def partition2(l, key):
     else:
       right.append(e)
   return left, right
+
+
+def skip(it, num):
+  it = iter(it)
+  for _ in range(num):
+    next(it)
+  for e in it:
+    yield e
