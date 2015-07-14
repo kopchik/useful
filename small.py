@@ -1,7 +1,6 @@
-def dictzip(d1, d2):
-  for k, v1 in d1.items():
-    v2 = d2[k]
-    yield (k, v1, v2)
+def dictzip(*ds):
+  for key in ds[0]:
+    yield [key] + [d[key] for d in ds]
 
 
 def flatten(l):
