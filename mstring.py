@@ -32,7 +32,7 @@ def s(string, lvl=1):
 
 
 def s2(string, lvl=1):
-  substitutions = re.findall("\{([a-zA-Z_0-9\:\.]+)\}", string, re.M)
+  substitutions = re.findall("\{(.+?)\}", string, re.M)
 
   if not substitutions:
     return string
