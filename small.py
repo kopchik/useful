@@ -1,3 +1,4 @@
+from collections import OrderedDict
 class OrderedDefaultDict(OrderedDict):
   """ Ordered default dict. """
   def __init__(self, factory, *args, **kwargs):
