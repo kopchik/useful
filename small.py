@@ -1,3 +1,14 @@
+class OrderedDefaultDict(OrderedDict):
+  """ Ordered default dict. """
+  def __init__(self, factory, *args, **kwargs):
+    self.default_factory = factory
+    super(OrderedDefaultDict, self).__init__(*args, **kwargs)
+
+  def __missing__ (self, key):
+    self[key] = default = self.default_factory()
+    return default
+
+
 def dictzip(*ds):
   for key in ds[0]:
     yield [key] + [d[key] for d in ds]
@@ -87,3 +98,5 @@ def skip(it, num):
     next(it)
   for e in it:
     yield e
+
+
