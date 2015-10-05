@@ -12,6 +12,11 @@ class Struct:
   def update(self, **entries):
     self.__dict__.update(entries)
 
+  def __dir__(self):
+    return (attr for attr in self.__dict__.keys()
+            if not attr.startswith('__'))
+
+
 if __name__ == '__main__':
   struct = Struct(a=1, b=2)
   struct.update(c=3)
