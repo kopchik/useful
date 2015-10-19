@@ -17,6 +17,12 @@ class Struct:
             if not attr.startswith('__'))
 
 
+class DefaultStruct(Struct):
+  def __getattr__(self, name):
+    value = DefaultStruct()
+    setattr(self, name, value)
+    return value
+
 if __name__ == '__main__':
   struct = Struct(a=1, b=2)
   struct.update(c=3)
