@@ -101,3 +101,8 @@ def skip(it, num):
     yield e
 
 
+def tlaunch(f, *args, daemon=True, **kwargs):
+  from threading import Thread
+  t = Thread(target=f, args=args, kwargs=kwargs, daemon=daemon)
+  t.start()
+  return t
