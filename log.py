@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from fnmatch import fnmatch
 from copy import copy
+import time
 import sys
 
 try:
@@ -53,7 +54,10 @@ class Log:
 
   def log(self, *msg):
     if logfilter.test(self.path):
-      msg = '.'.join(self.path)+': '+" ".join(str(m) for m in msg)
+      path = '.'.join(self.path)
+      msg = " ".join(str(m) for m in msg)
+      ts  = time.strftime("%Y/%m/%d %H:%M:%S ")
+      msg = ts + path + ': ' + msg
       if self.file == sys.stderr:
         style = styles.get(self.path[-1], styles['debug'])
         print(colored(msg, **style), file=self.file)
