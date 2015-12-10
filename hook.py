@@ -24,7 +24,7 @@ class Hook:
 
   def fire(self, event, *args, **kwargs):
     if event not in self.cb_map:
-       self.log.notice("no handler for %s" % event)
+       self.log.notice("no handler for {}".format(event))
        return
 
     handlers = self.cb_map[event]
