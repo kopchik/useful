@@ -10,5 +10,6 @@ setup(name='useful',
       license="GPLv3",
       description="Modules simplifying everyday life",
       packages=['useful'],
-      package_dir = {'useful': './'}
+      package_dir = {'useful': './'},
+      install_requires = [ 'blessings' ]
 )

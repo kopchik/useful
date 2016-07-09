@@ -640,7 +640,7 @@ def mywrapper(f):
       old_settings = termios.tcgetattr(fd)
       tty.setraw(fd)
       try:
-        return f()
+        return f(*args, **kwargs)
       finally:
         termios.tcsetattr(fd, termios.TCSADRAIN,
                           old_settings)
