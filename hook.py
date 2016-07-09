@@ -18,6 +18,11 @@ class Hook:
 
   def register(self, event, cb):
     self.cb_map[event].append(cb)
+  add = register
+
+  def unregister(self, event, cb):
+    self.cb_map[event].remove(cb)
+  rm = unregister
 
   def has_hook(self, event):
     return event in self.cb_map
@@ -37,5 +42,4 @@ class Hook:
         msg="error on event {ev}: {err} ({typ}) (in {hdl})" \
                 .format(err=err, typ=type(err), ev=event, hdl=handler)
         self.log.error(msg)
-
 
